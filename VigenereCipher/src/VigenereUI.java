@@ -1,9 +1,10 @@
 
-import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.stage.FileChooser;
 import javax.swing.JFileChooser;
 import vigenerecipher.VigenereCipher;
 
@@ -37,13 +38,7 @@ public class VigenereUI extends javax.swing.JApplet {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(VigenereUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(VigenereUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(VigenereUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(VigenereUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
@@ -51,12 +46,12 @@ public class VigenereUI extends javax.swing.JApplet {
         /* Create and display the applet */
         try {
             java.awt.EventQueue.invokeAndWait(new Runnable() {
+                @Override
                 public void run() {
                     initComponents();
                 }
             });
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (InterruptedException | InvocationTargetException ex) {
         }
     }
 
@@ -70,6 +65,7 @@ public class VigenereUI extends javax.swing.JApplet {
     private void initComponents() {
 
         Algorithm = new javax.swing.ButtonGroup();
+        output = new javax.swing.ButtonGroup();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -87,17 +83,33 @@ public class VigenereUI extends javax.swing.JApplet {
         jRadioButton2 = new javax.swing.JRadioButton();
         jRadioButton3 = new javax.swing.JRadioButton();
         jRadioButton4 = new javax.swing.JRadioButton();
+        jRadioButton5 = new javax.swing.JRadioButton();
+        jLabel5 = new javax.swing.JLabel();
+        jRadioButton6 = new javax.swing.JRadioButton();
+        jRadioButton7 = new javax.swing.JRadioButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTextArea3 = new javax.swing.JTextArea();
+        jLabel6 = new javax.swing.JLabel();
+        jButton5 = new javax.swing.JButton();
+
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Lucida Fax", 1, 36)); // NOI18N
         jLabel1.setText("=ENCRYPTOR=");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(209, 11, -1, -1));
 
-        jLabel2.setText("Plain Text:");
+        jLabel2.setText("Key:");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 170, -1, -1));
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
+        jTextArea1.setToolTipText("Max 25 chars");
         jScrollPane1.setViewportView(jTextArea1);
 
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 160, 550, 30));
+
         jLabel3.setText("From File:");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 70, -1, -1));
 
         jButton1.setText("Browse");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -105,6 +117,7 @@ public class VigenereUI extends javax.swing.JApplet {
                 jButton1ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(372, 117, 300, -1));
 
         jTextField1.setText("File Path");
         jTextField1.setEnabled(false);
@@ -113,6 +126,7 @@ public class VigenereUI extends javax.swing.JApplet {
                 jTextField1ActionPerformed(evt);
             }
         });
+        getContentPane().add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(372, 85, 300, -1));
 
         jButton2.setText("Encrypt!");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -120,14 +134,24 @@ public class VigenereUI extends javax.swing.JApplet {
                 jButton2ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 210, 339, 43));
 
         jButton3.setText("Decrypt!");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 260, 340, 43));
 
         jTextArea2.setColumns(20);
         jTextArea2.setRows(5);
         jScrollPane2.setViewportView(jTextArea2);
 
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 370, 339, 55));
+
         jLabel4.setText("Cipher Text:");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 350, -1, -1));
 
         jButton4.setText("RESET");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
@@ -135,111 +159,104 @@ public class VigenereUI extends javax.swing.JApplet {
                 jButton4ActionPerformed(evt);
             }
         });
+        getContentPane().add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 370, 150, 50));
 
         Algorithm.add(jRadioButton1);
         jRadioButton1.setText("Autokey VigenereCipher Standard");
+        jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton1ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jRadioButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 260, -1, -1));
 
         Algorithm.add(jRadioButton2);
         jRadioButton2.setText("Autokey Vigenere Cipher Extended");
+        getContentPane().add(jRadioButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 290, -1, -1));
 
         Algorithm.add(jRadioButton3);
         jRadioButton3.setText("VigenereCipher Extended");
+        jRadioButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton3ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jRadioButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 230, -1, -1));
 
         Algorithm.add(jRadioButton4);
+        jRadioButton4.setSelected(true);
         jRadioButton4.setText("VigenereCipher Standard");
+        getContentPane().add(jRadioButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 200, -1, -1));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(209, 209, 209)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addComponent(jLabel2)
-                        .addGap(292, 292, 292)
-                        .addComponent(jLabel3))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 339, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(6, 6, 6)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(jLabel4))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 339, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(11, 11, 11)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(27, 27, 27)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(59, 59, 59)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jRadioButton1)
-                                    .addComponent(jRadioButton2)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 339, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(60, 60, 60)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jRadioButton4)
-                                    .addComponent(jRadioButton3))))))
-                .addContainerGap(34, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(11, 11, 11)
-                .addComponent(jLabel1)
-                .addGap(11, 11, 11)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(5, 5, 5)
-                        .addComponent(jLabel3)))
-                .addGap(1, 1, 1)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(12, 12, 12)
-                        .addComponent(jButton1)))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jRadioButton4)
-                        .addGap(3, 3, 3)
-                        .addComponent(jRadioButton3)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(3, 3, 3)
-                        .addComponent(jRadioButton1)
-                        .addGap(3, 3, 3)
-                        .addComponent(jRadioButton2))
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(11, 11, 11)
-                .addComponent(jLabel4)
-                .addGap(6, 6, 6)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(30, Short.MAX_VALUE))
-        );
+        output.add(jRadioButton5);
+        jRadioButton5.setSelected(true);
+        jRadioButton5.setText("Default");
+        getContentPane().add(jRadioButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 320, -1, -1));
+
+        jLabel5.setText("Output:");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 320, -1, -1));
+
+        output.add(jRadioButton6);
+        jRadioButton6.setText("Per 5 Chars");
+        getContentPane().add(jRadioButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 320, -1, -1));
+
+        output.add(jRadioButton7);
+        jRadioButton7.setText("No Space");
+        getContentPane().add(jRadioButton7, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 320, -1, -1));
+
+        jTextArea3.setColumns(20);
+        jTextArea3.setRows(5);
+        jScrollPane3.setViewportView(jTextArea3);
+
+        getContentPane().add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(27, 85, 339, 55));
+
+        jLabel6.setText("Plain Text:");
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(27, 65, -1, -1));
+
+        jButton5.setText("Save To File");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+        getContentPane().add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 370, 130, 50));
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+        VigenereCipher _VC = new VigenereCipher();
+        _VC.setStr(jTextArea3.getText().toUpperCase());
+        
+        // algoritma yang digunakan
+        if(Algorithm.isSelected(jRadioButton4.getModel())){
+            _VC.setKey(jTextArea1.getText().toUpperCase());
+            _VC.genKey();
+            _VC.processStandard();
+        } else{
+            if (Algorithm.isSelected(jRadioButton3.getModel())){
+                _VC.setKey(jTextArea1.getText().toUpperCase());
+                _VC.genKey();
+                _VC.processExtended();
+            } else{
+              if (Algorithm.isSelected(jRadioButton1.getModel())){
+                _VC.setKey(jTextArea1.getText().toUpperCase());
+                _VC.processAKStandard();
+            } else{
+                  _VC.setKey(jTextArea1.getText().toUpperCase());
+                  _VC.processAKExtended();
+              }
+            }
+        }
+        
+        // output
+        if (output.isSelected(jRadioButton5.getModel())){
+            _VC.encSpace();
+        } else{
+            if (output.isSelected(jRadioButton6.getModel())){
+                _VC.encSpace5();
+            }
+        }
+        
+        jTextArea2.setText(_VC.getEncStr());
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -249,7 +266,7 @@ public class VigenereUI extends javax.swing.JApplet {
         filename = filename.replace("\\", "\\\\");
         jTextField1.setText(filename);
         try {
-            jTextArea1.setText(VC.FileReader(filename));
+            jTextArea3.setText(VC.FileReader(filename));
         } catch (FileNotFoundException e){
             System.err.println(e);
         }
@@ -260,8 +277,75 @@ public class VigenereUI extends javax.swing.JApplet {
     }//GEN-LAST:event_jTextField1ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
+        jTextArea1.setText(null);
+        jTextArea2.setText(null);
+        jTextArea3.setText(null);
+        Algorithm.setSelected(jRadioButton4.getModel(), rootPaneCheckingEnabled);
+        output.setSelected(jRadioButton5.getModel(), rootPaneCheckingEnabled);
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jRadioButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jRadioButton3ActionPerformed
+
+    private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jRadioButton1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        VigenereCipher _VC = new VigenereCipher();
+        _VC.setStr(jTextArea3.getText().toUpperCase());
+        
+        // algoritma yang digunakan
+        if(Algorithm.isSelected(jRadioButton4.getModel())){
+            _VC.setKey(jTextArea1.getText().toUpperCase());
+            _VC.genKey();
+            _VC.processDecStd();
+        } else{
+            if (Algorithm.isSelected(jRadioButton3.getModel())){
+                _VC.setKey(jTextArea1.getText().toUpperCase());
+                _VC.genKey();
+                _VC.processDecExtended();
+            } else{
+              if (Algorithm.isSelected(jRadioButton1.getModel())){
+                _VC.setKey(jTextArea1.getText().toUpperCase());
+                _VC.processDecAKStandard();
+            } else{
+                  _VC.setKey(jTextArea1.getText().toUpperCase());
+                  _VC.processDecAKExtended();
+              }
+            }
+        }
+        
+        // output
+        if (output.isSelected(jRadioButton5.getModel())){
+            _VC.encSpace();
+        } else{
+            if (output.isSelected(jRadioButton6.getModel())){
+                _VC.encSpace5();
+            }
+        }
+        
+        jTextArea2.setText(_VC.getEncStr());
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        JFileChooser fc = new JFileChooser();
+        fc.showSaveDialog(this);
+        String filename = fc.getSelectedFile().getAbsolutePath();
+        filename = filename.replace("\\", "\\\\");
+        filename = filename.concat(".txt");
+        PrintWriter pw = null;
+        try {
+            pw = new PrintWriter(filename,"UTF-8");
+        } catch (FileNotFoundException | UnsupportedEncodingException ex) {
+            Logger.getLogger(VigenereUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        if (pw != null){
+            pw.println(jTextArea2.getText());
+            pw.close();
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -270,18 +354,27 @@ public class VigenereUI extends javax.swing.JApplet {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JRadioButton jRadioButton3;
     private javax.swing.JRadioButton jRadioButton4;
+    private javax.swing.JRadioButton jRadioButton5;
+    private javax.swing.JRadioButton jRadioButton6;
+    private javax.swing.JRadioButton jRadioButton7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextArea jTextArea2;
+    private javax.swing.JTextArea jTextArea3;
     private javax.swing.JTextField jTextField1;
+    private javax.swing.ButtonGroup output;
     // End of variables declaration//GEN-END:variables
 }
