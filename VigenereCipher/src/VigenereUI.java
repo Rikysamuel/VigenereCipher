@@ -334,7 +334,9 @@ public class VigenereUI extends javax.swing.JApplet {
         fc.showSaveDialog(this);
         String filename = fc.getSelectedFile().getAbsolutePath();
         filename = filename.replace("\\", "\\\\");
-        filename = filename.concat(".txt");
+        if(!filename.substring(filename.length()-3).equals("txt")){
+            filename = filename.concat(".txt");
+        }
         PrintWriter pw = null;
         try {
             pw = new PrintWriter(filename,"UTF-8");
